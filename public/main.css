@@ -1,0 +1,17 @@
+* {
+  font-family: Helvetica;
+}
+
+.record {
+  cursor: pointer;
+}
+
+.visualizer {
+  display: flex;
+  flex-direction: row;
+}
+
+.visualizer div {
+  width: 3px;
+  background: blue;
+}
