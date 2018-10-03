@@ -4,16 +4,15 @@ const recorderNode = document.getElementById("record")
 const audioCtx = new AudioContext()
 const audioSrc = audioCtx.createMediaElementSource(audio)
 const analyser = audioCtx.createAnalyser()
-const fftSize = 4096
+const fftSize = 512
 analyser.fftSize = fftSize
+// analyser.smoothingTimeConstant = 0.2
 audioSrc.connect(analyser)
 audioSrc.connect(audioCtx.destination)
 
 const bufferlength = analyser.frequencyBinCount
 const frequencyData = new Uint8Array(bufferlength)
 analyser.getByteFrequencyData(frequencyData)
-console.log(frequencyData)
-
 
 // recorderNode.addEventListener("click", () => {
 //   navigator.mediaDevices.getUserMedia({ audio: true }).then(record)
@@ -53,53 +52,48 @@ const record = stream => {
   // }, 3000)
 };
 
-// const analyseFile = () => {
-//   const audioCtx = new AudioContext()
-//   const audio = player
-//   console.log(audio)
-//   const audioSrc = audioCtx.createMediaElementSource(audio)
-//   const analyser = audioCtx.createAnalyser()
-//   analyser.fftSize = 2048
-//   audioSrc.connect(analyser)
-//   audioSrc.connect(audioCtx.destination)
-//   analyser.connect(audioCtx.destination);
-//
-//   const frequencyData = new Uint8Array(analyser.frequencyBinCount)
-//   analyser.getByteFrequencyData(frequencyData);
-//   console.log(frequencyData)
-//
-//   // return  analyser.getByteFrequencyData(frequencyData);
-//
-// }
-
 // i = 240 2400
 
 const sampleRate = audioCtx.sampleRate
 const bandSize = (sampleRate / fftSize)
 
-const stuff = []
-const averageFrequencyWeights = weightsLists => {
-    return weightsLists.reduce((acc, weights, i) => {
+const averageFrequencyWeights = spectrogramData => {
+    return spectrogramData.reduce((acc, weights, i) => {
       return sumArrays(acc, Array.from(weights))
-    }, Array.from(Array(fftSize / 2), () => 0)).map(el => el / weightsLists.length)
+    }, Array.from(Array(fftSize / 2), () => 0)).map(el => el / spectrogramData.length)
 }
 
 const sumArrays = (arr1, arr2) => arr1.map((el, idx) => el + arr2[idx])
 
-
-const getFrequencyWeights = () => {
+// below works
+const data = []
+const getSpectrogram = () => {
   const recordAudio = () => {
      if (!audio.paused) {
-       // setTimeout(recordAudio, 0)
-       requestAnimationFrame(recordAudio);
+       requestAnimationFrame(recordAudio) // bit of a hack
        analyser.getByteFrequencyData(frequencyData)
-       stuff.push(frequencyData)
+       data.push(Object.assign([], frequencyData))
      }
   }
   audio.play()
   recordAudio()
-};
+}
+// above works
 
+
+
+
+const getMaxIdx = arr => {
+  return arr.reduce((acc, el, idx) => {
+    const [currentMaxValue, currentMaxValueIndex] = acc
+    return (el > currentMaxValue) ? [el, idx] : acc
+  },[-Infinity, -1])[1]
+}
+
+const getLoudestFormant = averageFrequencyData => {
+  const maxIdx = getMaxIdx(averageFrequencyData)
+  return (maxIdx * bandSize) + (bandSize / 2)
+}
 
 const visualizeWaveForm = data => {
   const visualizer = document.getElementById("visualizer")
@@ -111,21 +105,9 @@ const visualizeWaveForm = data => {
   }
 }
 
-const run = () => {
-  getFrequencyWeights()
-  let a = averageFrequencyWeights(stuff)
-  visualizeWaveForm(a)
+const run = async () => {
+  const spectrogramData = await getSpectrogram()
+  const averageFrequencyData = averageFrequencyWeights(spectrogramData)
+  console.log(averageFrequencyData)
+  visualizeWaveForm(averageFrequencyData)
 }
-
-
-  // const context = new AudioContext()
-  // const source = context.createMediaStreamSource(stream)
-  // const processor = context.createScriptProcessor(1024, 1, 1)
-  //
-  //  source.connect(processor)
-  //  processor.connect(context.destination)
-  //
-  //  processor.onaudioprocess = function(e) {
-  //    // Do something with the data, i.e Convert this to WAV
-  //    console.log(e.inputBuffer);
-  //  };
