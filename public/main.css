@@ -6,12 +6,31 @@
   cursor: pointer;
 }
 
-.visualizer {
+.visualizations {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.visualizer div {
+.visualization {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: 50px;
+}
+
+.visualization div {
   width: 3px;
   background: blue;
+}
+
+.ipa-nodes label {
+  cursor: pointer;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.ipa-nodes {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 50px;
 }

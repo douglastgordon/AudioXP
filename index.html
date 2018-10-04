@@ -6,12 +6,74 @@
     <link rel="stylesheet" href="./main.css">
   </head>
   <body>
-    <h1>Audio Stuff</h1>
-    <!-- <audio id="player" controls src="./ipa_sounds/close_front_unrounded.mp3"></audio> -->
-    <audio id="player" controls src="./ipa_sounds/close_back_rounded.mp3"></audio>
-    <!-- <audio id="player" controls src="./ipa_sounds/open_back_rounded.mp3"></audio> -->
+    <h1 id="title">Audio Stuff</h1>
+    <!-- ["a", "ä", "ɑ", "ɒ", ɐ, "æ", ɛ, œ, ɜ, ɞ, ʌ, ɔ,
+
+
+ "ɐ", "e", "i", "o", "u", "y", "ø", "œ", "ɔ", "ɛ", "ɤ", "ɯ", "ɶ", "ʌ"] -->
+    <div id="ipa-nodes" class="ipa-nodes">
+      <label>a
+        <audio id="ipa-a" src="./ipa_sounds/Open_front_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ä
+        <audio id="ipa-ä" src="./ipa_sounds/Open_front_rounded_vowel.mp3"></audio>
+      </label>
+      <label>ɑ
+        <audio id="ipa-ɑ" src="./ipa_sounds/Open_back_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ɒ
+        <audio id="ipa-ɒ" src="./ipa_sounds/Open_back_rounded_vowel.mp3"></audio>
+      </label>
+      <label>æ
+        <audio id="ipa-æ" src="./ipa_sounds/Near-open_front_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ɐ
+        <audio id="ipa-ɐ" src="./ipa_sounds/Near-open_central_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ɛ
+        <audio id="ipa-ɛ" src="./ipa_sounds/Open-mid_front_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>œ
+        <audio id="ipa-œ" src="./ipa_sounds/Open-mid_front_rounded_vowel.mp3"></audio>
+      </label>
+      <label>ɜ
+        <audio id="ipa-ɜ" src="./ipa_sounds/Open-mid_central_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ɞ
+        <audio id="ipa-ɞ" src="./ipa_sounds/Open-mid_central_rounded_vowel.mp3"></audio>
+      </label>
+      <label>ʌ
+        <audio id="ipa-ʌ" src="./ipa_sounds/Open-mid_back_unrounded_vowel.mp3"></audio>
+      </label>
+      <label>ɔ
+        <audio id="ipa-ɔ" src="./ipa_sounds/Open-mid_back_rounded_vowel.mp3"></audio>
+      </label>
+      <label>bat
+        <audio id="bat" src="./ipa_sounds_old/bat-a.m4a"></audio>
+      </label>
+    </div>
+    <!-- <audio id="ipa-e" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-o" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-y" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ø" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-œ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɑ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɔ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɛ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɤ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɯ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ɶ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-ʌ" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+
+    <audio id="ipa-i" controls src="./ipa_sounds/Close_front_unrounded_vowel.mp3"></audio>
+    <audio id="ipa-u" controls src="./ipa_sounds/Close_back_rounded_vowel.mp3"></audio> -->
+
+
+
+
+    <!-- <audio id="player" controls src="./ipa_sounds/1000hztest.wav"></audio> -->
     <div class="record" id="record">Record Yourself</div>
-    <div id="visualizer" class="visualizer"></div>
+    <div id="visualizations" class="visualizations"></div>
 
   </body>
   <script type="text/javascript" src="./index.js">
