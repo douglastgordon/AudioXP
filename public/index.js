@@ -7,13 +7,12 @@ const IPAnodes = ipaNodeIds.reduce((acc, nodeId) => {
   return Object.assign({}, acc, {[nodeId]: document.getElementById(nodeId)})
 }, {})
 
-const ipaNodes = document.getElementById("ipa-nodes")
-ipaNodes.addEventListener("click", (e) => {
-  e.target.children[0].play()
-  console.log(e.currentTarget)
-})
-// const ɒ = document.getElementById("ipa-ɒ")
-// const i = document.getElementById("ipa-i")
+{
+  const ipaNodes = document.getElementById("ipa-nodes")
+  ipaNodes.addEventListener("click", (e) => {
+    e.target.children[0].play()
+  })
+}
 
 
 // create audio context
@@ -33,7 +32,7 @@ const averageFrequencyWeights = spectrogramData => {
     }, Array.from(Array(fftSize / 2), () => 0)).map(el => el / spectrogramData.length)
 }
 
-const lowPassFilter = (frequencyArray, cutoff=5000) => {
+const lowPassFilter = (frequencyArray, cutoff=3000) => {
   return frequencyArray.slice(0, cutoff / bandSize)
 }
 
@@ -100,20 +99,39 @@ const getFrequencyAverage = async audioNode => {
   const frequencyArray = averageFrequencyWeights(spectrogramData)
   const lowPassFrequencyArray = lowPassFilter(frequencyArray)
   visualizeWaveForm(lowPassFrequencyArray)
-  console.log(lowPassFrequencyArray)
   return lowPassFrequencyArray
 }
 
+const getComparisons = frequencyData => {
+  return Object.entries(IPAfrequencyData).reduce((acc, [key, val]) => {
+    return [...acc, [key, getComparisonScore(lowPassFilter(val), frequencyData)]]
+  }, []).sort(([k1, v1], [k2, v2]) => v1 - v2)
+}
+
+
+// what a bust
+// const getIPAVowelData = async () => {
+//   console.log(IPAnodes)
+//   return Object.entries  (IPAnodes).reduce(async (acc, [key, audioNode]) => {
+//     const spectrogramData = await getSpectrogram(audioNode)
+//     const frequencyArray = averageFrequencyWeights(spectrogramData)
+//     const lowPassFrequencyArray = lowPassFilter(frequencyArray)
+//     visualizeWaveForm(lowPassFrequencyArray) // for fun
+//     return Object.assign({}, acc, {[key]: lowPassFrequencyArray})
+//   }, {})
+// }
+
+
+const getComparisonScore = (arr1, arr2) => {
+  return arr1.reduce((acc, el, idx) => {
+    return acc + Math.abs(el - arr2[idx])
+  }, 0) / arr1.length
+}
 
 
 // recorderNode.addEventListener("click", () => {
 //   navigator.mediaDevices.getUserMedia({ audio: true }).then(record)
 // })
-
-
-const playClip = (e) => {
-  console.log(e)
-}
 
 const record = stream => {
   // const audioSrc = audioCtx.createMediaStreamSource(stream)
@@ -151,12 +169,5 @@ const record = stream => {
 
 
 // compare to real ipa!!!!
-
-const getComparisonScore = (arr1, arr2) => {
-  return arr1.reduce((acc, el, idx) => {
-    return acc + Math.abs(el - arr2[idx])
-  }, 0) / arr1.length
-}
-
 
 // bat to a === 28
