@@ -65,23 +65,26 @@ const averageFrequencyWeights = spectrogramData => {
 
 const sumArrays = (arr1, arr2) => arr1.map((el, idx) => el + arr2[idx])
 
-// below works
-const data = []
-const getSpectrogram = () => {
+const play = (audio, recorderFn) => (
+  new Promise((resolve, reject) => {
+    audio.play()
+    recorderFn()
+    audio.onerror = reject
+    audio.onended = resolve
+ })
+)
+
+const getSpectrogram = async () => {
+  const data = []
   const recordAudio = () => {
      if (!audio.paused) {
-       requestAnimationFrame(recordAudio) // bit of a hack
+       setTimeout(recordAudio, 2)
        analyser.getByteFrequencyData(frequencyData)
        data.push(Object.assign([], frequencyData))
      }
   }
-  audio.play()
-  recordAudio()
+  return play(audio, recordAudio).then(() => data)
 }
-// above works
-
-
-
 
 const getMaxIdx = arr => {
   return arr.reduce((acc, el, idx) => {
@@ -108,6 +111,6 @@ const visualizeWaveForm = data => {
 const run = async () => {
   const spectrogramData = await getSpectrogram()
   const averageFrequencyData = averageFrequencyWeights(spectrogramData)
-  console.log(averageFrequencyData)
   visualizeWaveForm(averageFrequencyData)
+  console.log(averageFrequencyData)
 }
